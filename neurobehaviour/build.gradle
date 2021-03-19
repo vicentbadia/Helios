@@ -1,0 +1,97 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.chaquo.python'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+
+        //Chaquopy 8.0
+        sourceSets {
+            main {
+                python {
+                    srcDirs = ["src/main/python"]
+                }
+            }
+        }
+
+        python {
+            //using Python 3.7.7 - portatil
+            //buildPython "C:/Users/Usuario/AppData/Local/Programs/Python/Python37/python.exe"
+            //using Python 3.7.7 - PC i3B
+            //buildPython "C:/Users/viibba/AppData/Local/Programs/Python/Python37/python.exe"
+            //Disble compilation of local source code:
+            pyc {
+                src false
+            }
+            pip {
+                //install "numpy"
+                //install "scipy"
+                //install "scikit-learn"
+                //install "argparse"
+                //install "opencv-python"
+                install "opencv-python-headless"
+                //install "matplotlib"
+                install "keras==2.3.1"
+                install "tensorflow"
+                install "textblob"
+                install "nltk"
+                //install "request"
+                install "--no-binary=h5py h5py"
+            }
+        }
+
+        ndk {
+            //abiFilters "arm64-v8a", "x86"
+            //abiFilters "x86"
+            abiFilters "arm64-v8a"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        innerTest {
+        }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //Database dependencies
+    def room_version = "2.2.6"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // optional - RxJava support for Room
+    implementation "androidx.room:room-rxjava2:$room_version"
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation "androidx.room:room-guava:$room_version"
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
+
+    //Other modules used by Neurobehaviour
+    implementation 'eu.h2020.helios_social.core.messaging:messaging:1.1.6'
+    implementation 'eu.h2020.helios_social.core.context:context:1.0.10'
+}
